@@ -1,0 +1,154 @@
+/* Editor */
+
+.CodeMirror pre > * { text-indent: 0px; }
+
+div.CodeMirror span.CodeMirror-matchingbracket {
+color: #006EFF !important;
+}
+
+/* Errors */
+
+#editor-errors {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  background: rgba(255, 185, 185, 0.7);
+  text-align: center;
+  padding: 1rem;
+  width: calc(50% - 32px);
+}
+
+#editor-errors-line {
+  display: none;
+}
+
+/* Separator icon */
+
+#separator-icon {
+  position: fixed;
+  width: 340px !important; height: 475px !important;
+  top: 10px;
+  left: 50%;
+  padding: 10px 0;
+  background: #FFF;
+  z-index: 999;
+  margin-left: -35px;
+  -webkit-transform: scale(0.2);
+  -webkit-transform-origin: 0 0;
+}
+
+#separator-icon svg {
+  left: -75px;
+}
+
+#separator-icon.animated:hover {
+  cursor: pointer;
+}
+
+#separator-icon.animated svg path {
+  -webkit-transition: all 0.2s ease-out;
+}
+
+#separator-icon.animated:hover svg path {
+  stroke: #3C92FF;
+}
+
+/* Preview actions */
+
+#preview-actions {
+  position: fixed;
+  top: 0; right: 0;
+  z-index: 1000;
+  padding: 1rem 2rem 0 0;
+  line-height: 2rem;
+  font-weight: 200;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+#preview-actions a,
+#preview-actions a:hover,
+#preview-actions a:active {
+  margin-left: 1rem;
+  color: #3C92FF;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#preview-actions a.on,
+#preview-actions a.on:hover,
+#preview-actions a.on:active {
+  color: black;
+  cursor: default;
+}
+
+/* Preview */
+
+#preview {
+  position: fixed;
+  top: 2em; right: 0; bottom: 0;
+  width: 50%;
+  border-left: 1px solid #B5B5B5;
+
+  font-family: Lora;
+  font-size: 22px;
+  line-height: 1.6;
+  color: #505050;
+
+  padding: 1rem 2rem 1em 45px;
+  box-sizing: border-box;
+}
+
+#preview-content {
+  width: 100%; height: 100%;
+  overflow-y: auto;
+}
+
+#preview p {
+  text-indent: 2em;
+}
+#preview p:first-child {
+  margin-top: 0;
+}
+
+#preview a,
+#preview a:hover,
+#preview a:active {
+  color: #505050;
+  text-decoration: none;
+  cursor: pointer;
+  background-image: -webkit-linear-gradient(top, #FFF 50%, #999 50%);
+  background-image: -moz-linear-gradient(top, #FFF 50%, #999 50%);
+  background-image: linear-gradient(to bottom, #FFF 50%, #999 50%);
+  background-repeat: repeat-x;
+  background-size: 100% 2px;
+  background-position: 0 24px;
+}
+
+#preview a[target="_blank"],
+#preview a[target="_blank"]:hover,
+#preview a[target="_blank"]:active {
+  background-image: -webkit-linear-gradient(top, #FFF 50%, #02ADF2 50%);
+  background-image: -moz-linear-gradient(top, #FFF 50%, #02ADF2 50%);
+  background-image: linear-gradient(to bottom, #FFF 50%, #02ADF2 50%);
+}
+
+#preview.inspector .hovered {
+  border-radius: 2px;
+  box-shadow: 0px 1px 1px;
+}
+#preview.inspector a.hovered {
+  background: #FFFD90;
+}
+#preview.inspector p.hovered,
+#preview.inspector span.hovered {
+  background: #C3FF90;
+}
+#preview.interactive a.rd-opened,
+#preview.interactive a.rd-opened:hover,
+#preview.interactive a.rd-opened:active {
+  background-image: none;
+}
+#preview.interactive p[data-rd-openedby-id],
+#preview.interactive span[data-rd-openedby-i] {
+  display: none;
+}

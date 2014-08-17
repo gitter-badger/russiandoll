@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+  <head>
+
+    <title>Russiandoll</title>
+
+    <!-- Dependencies -->
+    <script src="js/vendor/jquery-1.10.2.min.js"></script>
+    <script src="js/vendor/underscore-1.6.0.min.js"></script>
+
+    <!-- Codemirror -->
+    <script src="js/vendor/codemirror-4.4.1.js"></script>
+    <script src="js/vendor/matchbrackets.js"></script>
+    <script src="js/vendor/closebrackets.js"></script>
+    <script src="js/vendor/sublime.js"></script>
+
+    <!-- SVG animation -->
+    <script src="js/vendor/raphael-2.1.0.min.js"></script>
+    <script src="js/vendor/jquery.lazylinepainter-1.4.1.min.js"></script>
+    <script src="js/russiandoll.path.js"></script>
+
+    <!-- Russiandoll and editor -->
+    <script src="js/russiandoll.js"></script>
+    <script src="js/editor.js"></script>
+
+    <!-- Application Styles -->
+
+    <link rel="stylesheet" type="text/css" href="css/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="css/editor.css">
+
+    <!-- Vendor styles -->
+
+    <link rel="stylesheet" type="text/css" href="css/vendor/normalize-3.0.1.css" />
+    <link rel="stylesheet" type="text/css" href="css/vendor/codemirror-4.4.1.css">
+    <link rel="stylesheet" type="text/css" href="css/vendor/neo.css">
+
+    <script>
+
+      /* Node-webkit initialization */
+
+      if ((typeof module !== "undefined" && module.exports &&
+          typeof window === 'undefined')) {
+
+        var gui = require('nw.gui');
+        var win = gui.Window.get();
+
+        var Menubar = new gui.Menu({ type: 'menubar' });
+        Menubar.createMacBuiltin("Russiandoll");
+        win.menu = Menubar;
+
+        // Eventually use require() here, now that we know
+        // that we have access to CommonJS
+
+      }
+
+    </script>
+
+  </head>
+
+  <body>
+    <textarea id="code-editor">
+>
+	[Hello].
+		How are [you]?
+			[We] never hang out [any more].
+				>
+					I miss [you].
+						I miss *[us](>i-miss-us)*.
+
+				>
+					Everyone's just so busy, that's the [problem].
+						But we have to *make* [the time].
+							[Soon].
+								We should get the [whole gang together].
+									We can drink [Bloody Marys]
+										like [we used to](>bloody-mary)
+
+									and talk about [the old times].
+										Do you ever think about [the old times](>the-old-times)?
+
+>i-miss-us
+	Do you [remember] how it used to be when we were together?
+
+>bloody-mary
+	[Once], we drank Bloody Marys together
+		>>
+			, [just] the two of us
+			>>
+				, just once
+	.
+
+>the-old-times
+	Now I only ever [see you] at [weddings]
+		>>
+			, though there can't be [many left now]
+			>>
+				, *[haha]*
+	.
+    </textarea>
+
+    <div id="editor-errors">
+
+      <strong>Error:</strong>
+
+      <span id="editor-errors-line">
+        (Line <span>8</span>)
+      </span>
+
+      <span id="editor-errors-message">Nothing to see here</span>
+
+    </div>
+
+    <div id="separator-icon"></div>
+
+    <div id="preview-actions">
+      <a id="inspector-button" href="#">Inspector</a>
+      <a id="interactive-button" href="#" class="on">Preview</a>
+    </div>
+
+    <div id="preview" class="interactive">
+      <div id="preview-content">
+      </div>
+    </div>
+
+  </body>
+</html>
