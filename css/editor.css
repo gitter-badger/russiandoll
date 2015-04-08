@@ -147,8 +147,38 @@ color: #006EFF !important;
 #preview.interactive a.rd-opened:hover,
 #preview.interactive a.rd-opened:active {
   background-image: none;
+  cursor: text;
 }
 #preview.interactive p[data-rd-openedby-id],
 #preview.interactive span[data-rd-openedby-i] {
   display: none;
+}
+
+.typing::after {
+  content: '';
+  width: 1px;
+  height: 1.6em;
+  background: rgba(0, 0, 0, 0.7) !important;
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  display: inline-block;
+  position: absolute;
+  opacity: 1;
+  -webkit-animation: blink 0.7s infinite;
+  -moz-animation: blink 0.7s infinite;
+  animation: blink 0.7s infinite;
+}
+@keyframes blink{
+  0% { opacity:1; }
+  50% { opacity:0; }
+  100% { opacity:1; }
+}
+@-webkit-keyframes blink{
+  0% { opacity:1; }
+  50% { opacity:0; }
+  100% { opacity:1; }
+}
+@-moz-keyframes blink{
+  0% { opacity:1; }
+  50% { opacity:0; }
+  100% { opacity:1; }
 }

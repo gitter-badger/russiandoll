@@ -1,10 +1,10 @@
-'use strict';
+;'use strict';
 
-;(function (_) {
+(function (_) {
 
   var _errorMessages = {
     templateMustBeString: 'Template must be a string',
-    unknownIndent: 'Indentation could not be determined. Do you have a paragraph and something nested in it?'
+    unknownIndent: "Indentation could not be determined. Do you have a paragraph and something nested in it?"
   };
 
   var _throwError = function (messageType, line) {
@@ -17,7 +17,7 @@
 
     // Deduce intentation
     var indentMatch = template.match(/^>(?![\r\n]){0,}[\r\n](\s+)/);
-    if (!indentMatch) return _throwError('unknownIndent');
+    if (!indentMatch) return _throwError('unknownIndent', 0);
     var indentation = indentMatch[1].length;
 
     // Split template by lines
@@ -65,8 +65,8 @@
 
   var Tokenizer = function (splitLines) {
 
-    // Utility to hardcode html tags for bold,
-    // italic and strikethrough
+    // Utility to hardcode markdown-like tags for bold (**),
+    // italic (*) and strikethrough (~~)
     var _replaceStyleTags = function (str) {
       return str
         .replace(/~~([^~]+?)~~/g,       '<del>$1</del>')
@@ -115,31 +115,28 @@
           tokens = _(tokens).map(function(token) {
 
             var linkMatch = token.match(/\[([^\]]+)\](?:\(([^\)]+)\))?/);
-            if (linkMatch) {
 
-              // Build link
-              var link = { type: 'link', value: linkMatch[1] }
-
-              // If there's a second part to the link tag, determine
-              // if it is referring to a hidden paragraph or an external link.
-              if (linkMatch[2]) {
-
-                var hiddenParagraphTarget = (linkMatch[2].match(/^>([\w-_]+)?/) || [])[1]
-                  , externalLinkTarget    = (linkMatch[2].match(/^(http(s)?:\/\/.*)/) || [])[1];
-
-                link.target = hiddenParagraphTarget || externalLinkTarget;
-
-                link.external = !!externalLinkTarget;
-
-              }
-
-              return link;
-
-            } else {
-
+            // If token is not a link, it's plain text.
+            if (!linkMatch)
               return { type: 'text', value: token };
 
+            // Build link
+            var link = { type: 'link', value: linkMatch[1] }
+
+            // If there's a second part to the link tag, determine
+            // if it is referring to a hidden paragraph or an external link.
+            if (linkMatch[2]) {
+
+              var hiddenParagraphTarget = (linkMatch[2].match(/^>([\w-_]+)?/) || [])[1]
+                , externalLinkTarget    = (linkMatch[2].match(/^(http(s)?:\/\/.*)/) || [])[1];
+
+              link.target = hiddenParagraphTarget || externalLinkTarget;
+
+              link.external = !!externalLinkTarget;
+
             }
+
+            return link;
 
           });
 

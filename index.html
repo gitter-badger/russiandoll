@@ -20,6 +20,7 @@
     <script src="js/russiandoll.path.js"></script>
 
     <!-- Russiandoll and editor -->
+    <script src="js/jquery.showbytyping.js"></script>
     <script src="js/russiandoll.js"></script>
     <script src="js/editor.js"></script>
 
@@ -60,42 +61,20 @@
   <body>
     <textarea id="code-editor">
 >
-	[Hello].
-		How are [you]?
-			[We] never hang out [any more].
-				>
-					I miss [you].
-						I miss *[us](>i-miss-us)*.
+  Salut [toi]
+    >>
+      , [mon amie](>mon-amie)
+  .
 
-				>
-					Everyone's just so busy, that's the [problem].
-						But we have to *make* [the time].
-							[Soon].
-								We should get the [whole gang together].
-									We can drink [Bloody Marys]
-										like [we used to](>bloody-mary)
+>mon-amie
+    [Comment](>comment) vas-tu?
 
-									and talk about [the old times].
-										Do you ever think about [the old times](>the-old-times)?
-
->i-miss-us
-	Do you [remember] how it used to be when we were together?
-
->bloody-mary
-	[Once], we drank Bloody Marys together
-		>>
-			, [just] the two of us
-			>>
-				, just once
-	.
-
->the-old-times
-	Now I only ever [see you] at [weddings]
-		>>
-			, though there can't be [many left now]
-			>>
-				, *[haha]*
-	.
+>comment
+  Je pense souvent à cet été de [vacances]
+    et à [l'arbre]
+      (il était si petit à l'époque)
+    que nous aimions
+  .
     </textarea>
 
     <div id="editor-errors">
@@ -113,11 +92,11 @@
     <div id="separator-icon"></div>
 
     <div id="preview-actions">
-      <a id="inspector-button" href="#">Inspector</a>
-      <a id="interactive-button" href="#" class="on">Preview</a>
+      <a id="inspector-button" href="#" class="on">Inspector</a>
+      <a id="interactive-button" href="#">Preview</a>
     </div>
 
-    <div id="preview" class="interactive">
+    <div id="preview" class="inspector">
       <div id="preview-content">
       </div>
     </div>

@@ -103,17 +103,17 @@ $(function(){
   });
 
   /* Interactive actions */
-  $(document).on('click', '#preview.interactive a[data-rd-opens-id]', function(e){
+  $(document).on('click', '#preview.interactive a[data-rd-opens-id]:not(.rd-opened)', function(e){
     e.preventDefault();
     var id = $(this).attr('data-rd-opens-id');
-    $('[data-rd-openedby-id="' + id + '"]').show();
+    $('[data-rd-openedby-id="' + id + '"]').showByTyping();
     $(this).addClass('rd-opened');
   });
 
-  $(document).on('click', '#preview.interactive a[data-rd-opens-i]', function(e){
+  $(document).on('click', '#preview.interactive a[data-rd-opens-i]:not(.rd-opened)', function(e){
     e.preventDefault();
     var i = $(this).attr('data-rd-opens-i');
-    $('[data-rd-openedby-i="' + i + '"]').show();
+    $('[data-rd-openedby-i="' + i + '"]').showByTyping();
     $(this).addClass('rd-opened');
   });
 
