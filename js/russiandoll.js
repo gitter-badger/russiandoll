@@ -79,26 +79,36 @@
       return _(lines).map(function(line, i){
 
         var content     = { }
-          , blockMatch  = line.content.match(/^>([\w-_]+)?/);
+          , isBlock  = /^>/.test(line.content);
 
         // Find block types and create tokens for them
-        if ( blockMatch ) {
+        if ( isBlock ) {
 
-          if ( line.level === 0 && !blockMatch[1] ) {
-            content.type = 'paragraph';
+          var blockID  = line.content.match(/^>>?([\w-_]+)?$/); // WARNING: WILL REJECT SILENTLY INVALID IDS.
+
+          blockID = blockID[1] ? blockID[1] : false;
+
+          if ( line.level === 0) {
+            if (blockID) {
+              content.type = 'paragraphWithID';
+              content.value = blockID;
+            } else {
+              content.type = 'paragraph';
+            }
           }
 
-          if ( line.level === 0 && blockMatch[1] ) {
-            content.type = 'hiddenParagraph';
-            content.value = blockMatch[1];
+          if ( line.level !== 0) {
+            if (blockID) {
+              content.type = 'branchWithID';
+              content.value = blockID;
+            } else {
+              content.type = 'branch';
+            }
           }
 
-          if ( line.level !== 0 ) {
-            content.type = 'branch';
-
-            // Is branch an inline branch?
-            if ( /^>>/.test(line.content) )
-              content.inline = true;
+          // Is the branch an double-bracketed (inline) branch
+          if ( /^>>/.test(line.content) ) {
+            content.inline = true;
           }
 
         // If line is a content line, tokenize inline elements
@@ -127,10 +137,10 @@
             // if it is referring to a hidden paragraph or an external link.
             if (linkMatch[2]) {
 
-              var hiddenParagraphTarget = (linkMatch[2].match(/^>([\w-_]+)?/) || [])[1]
+              var paragraphWithIDTarget = (linkMatch[2].match(/^>([\w-_]+)?/) || [])[1]
                 , externalLinkTarget    = (linkMatch[2].match(/^(http(s)?:\/\/.*)/) || [])[1];
 
-              link.target = hiddenParagraphTarget || externalLinkTarget;
+              link.target = paragraphWithIDTarget || externalLinkTarget;
 
               link.external = !!externalLinkTarget;
 
@@ -210,7 +220,7 @@
           ]);
         }
 
-        if ( token.content.type == 'hiddenParagraph' ) {
+        if ( token.content.type == 'paragraphWithID' ) {
           var content = _.flatten(parseTokens(token.children)).join('');
           results.push([
             '<p data-rd-openedby-id="' + token.content.value + '">',
@@ -227,6 +237,20 @@
           // If branch isn't inline, push a space before it
           results.push([
             '<span data-rd-openedby-i="' + id + '">',
+            token.content.inline ? '' : '&nbsp',
+             _replaceStyleTags(content),
+            '</span>'
+          ]);
+
+        }
+
+        if ( token.content.type == 'branchWithID' ) {
+
+          var content = _.flatten(parseTokens(token.children)).join('');
+
+          // If branch isn't inline, push a space before it
+          results.push([
+            '<span data-rd-openedby-id="' + token.content.value + '">',
             token.content.inline ? '' : '&nbsp',
              _replaceStyleTags(content),
             '</span>'

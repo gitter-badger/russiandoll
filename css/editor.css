@@ -143,6 +143,12 @@ color: #006EFF !important;
 #preview.inspector span.hovered {
   background: #C3FF90;
 }
+
+#preview.inspector p.hovered span,
+#preview.inspector span.hovered span {
+  background: rgba(255, 255, 255, 0.6);
+}
+
 #preview.interactive a.rd-opened,
 #preview.interactive a.rd-opened:hover,
 #preview.interactive a.rd-opened:active {
@@ -150,7 +156,8 @@ color: #006EFF !important;
   cursor: text;
 }
 #preview.interactive p[data-rd-openedby-id],
-#preview.interactive span[data-rd-openedby-i] {
+#preview.interactive span[data-rd-openedby-i],
+#preview.interactive span[data-rd-openedby-id] {
   display: none;
 }
 
