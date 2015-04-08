@@ -94,3 +94,24 @@ To do so, create a special fragment link`[text](>unique-id)`where `text` is the 
 		  English 
       girl.
 ```
+
+### Inline markup
+
+Russiandoll also support some basic text formatting syntaxes such as **bold (\*\*)**, **italic (\*)** and  **strikethrough (~~)**, as well as external links. 
+
+**Note:** Make sure your links begin by `http://`, `https://` or `mailto:` as those are the only ones allowed in Russiandoll. Furthermore, external links will always open in a new window.
+
+##### Example: 
+
+```
+>
+  **Bold**
+>
+  *Italic*
+>
+  ~~Strikethrough~~
+>
+  This opens a [branch], but this goes to my [website](http://mywebsite.com).
+  	Have you opened my website yet?
+```
+
