@@ -116,9 +116,6 @@
 
           content.type = 'content';
 
-          // Replace style tags before splitting lines
-          // line.content = _replaceStyleTags(line.content);
-
           // Split group betwen links and non-links, then
           // tokenize accordingly
           var tokens = _.compact(line.content.split(/(\[[^\]]+\](?:\([^\)]+\))?)/g));
@@ -333,7 +330,6 @@
       .replace(/(\s*\*\/\s*)$/i, '');
 
     var splitLines  = Splitter(templateContent);
-    console.log(splitLines);
     this.tree       = Tokenizer(splitLines);
     this.html       = Parser(this.tree);
 

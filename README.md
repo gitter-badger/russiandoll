@@ -6,11 +6,13 @@ Because an image is worth a thousand words, a working, live demo will shortly be
 
 ## Syntax
 
-Russiandoll is [indentation-based](https://en.wikipedia.org/wiki/Off-side_rule), which means that the level of indentation specifies the scope of the declarations. Like most indentation-based languages (Python, Ruby, etc), it doesn't matter whether you use spaces or tabs to indent your declarations.
+Russiandoll is [indentation-based](https://en.wikipedia.org/wiki/Off-side_rule), which means that the level of indentation specifies the scope of its declarations. Like most indentation-based languages (Python, Ruby, etc), it doesn't matter whether you use spaces or tabs to indent your declarations.
 
 Because it has literary purposes, Russiandoll is built around **paragraphs** that contain **fragment links** and **branches**. The fragment links trigger the branches and make them appear.
 
 Paragraph and branches share the same symbol, `>`. In the case of paragraphs, their content is displayed by default. The branches are only revealed when their trigger links are clicked.
+
+**Note:** Russiandoll automatically separates branches by spaces. If you don't want a branch to be introduced by a space, use `>>` instead of `>`.
 
 ### Paragraphs 
 
@@ -31,8 +33,7 @@ You can also write your text on multiple lines. Just be sure to add spaces at th
 >
   This is the first 
   line of the 
-  story 
-  .
+  story.
 ```
 
 ### Fragment links and branches
