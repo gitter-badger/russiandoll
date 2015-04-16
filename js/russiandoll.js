@@ -1,15 +1,17 @@
-;'use strict';
+'use strict';
 
 (function (_) {
 
   var _errorMessages = {
     templateMustBeString: 'Template must be a string',
-    unknownIndent: "Indentation could not be determined. Do you have a paragraph and something nested in it?"
+    unknownIndent: "Indentation could not be determined.",
+    badBlockSyntax: "Bad block syntax",
+    badLinkSyntax: "Bad link syntax"
   };
 
   var _throwError = function (messageType, line) {
     var error = { message: _errorMessages[messageType] };
-    if (line) error.line = line;
+    if (line) error.line = line + 1;
     throw new Error(JSON.stringify(error));
   };
 
@@ -78,15 +80,26 @@
     var tokens = (function tokenize (lines) {
       return _(lines).map(function(line, i){
 
-        var content     = { }
+        var content  = { }
           , isBlock  = /^>/.test(line.content);
 
         // Find block types and create tokens for them
         if ( isBlock ) {
-
-          var blockID  = line.content.match(/^>>?([\w-_]+)?$/); // WARNING: WILL REJECT SILENTLY INVALID IDS.
-
-          blockID = blockID[1] ? blockID[1] : false;
+          
+          // Separate block syntax parts
+          var block = line.content.match(/^>>?(?:(\-|\+))?([\w-_]+)?$/);
+          
+          // Throw error if regexp splitting failed.
+          if (!block)
+            return _throwError('badBlockSyntax', line.line);
+          
+          // Register the block's speed
+          content.speed = block[1] == '-' ? 0 : ( block[1] == '+' ? 2 : 1 );
+          
+          if (content.speed != 1) debugger;
+          
+          // Determine the block's type
+          var blockID = block[2] ? block[2] : false;
 
           if ( line.level === 0) {
             if (blockID) {
@@ -110,7 +123,7 @@
           if ( /^>>/.test(line.content) ) {
             content.inline = true;
           }
-
+        
         // If line is a content line, tokenize inline elements
         } else {
 
@@ -134,10 +147,15 @@
             // if it is referring to a hidden paragraph or an external link.
             if (linkMatch[2]) {
 
-              var paragraphWithIDTarget = (linkMatch[2].match(/^>([\w-_]+)?/) || [])[1]
-                , externalLinkTarget    = (linkMatch[2].match(/^(http(s)?:\/\/.*)/) || [])[1];
+              var paragraphWithIDTarget = (linkMatch[2].match(/^>([\w-_]+)?$/) || [])[1]
+                , externalLinkTarget    = (linkMatch[2].match(/^(http(s)?:\/\/.*)$/) || [])[1];
 
               link.target = paragraphWithIDTarget || externalLinkTarget;
+              
+              // If link matches neither block ID syntax nor link,
+              // it has a bad syntax.
+              if (!link.target)
+                return _throwError('badLinkSyntax', line.line);
 
               link.external = !!externalLinkTarget;
 
@@ -218,9 +236,10 @@
         }
 
         if ( token.content.type == 'paragraphWithID' ) {
+          
           var content = _.flatten(parseTokens(token.children)).join('');
           results.push([
-            '<p data-rd-openedby-id="' + token.content.value + '">',
+            '<p data-rd-openedby-id="' + token.content.value + '" data-rd-speed="' + token.content.speed + '">',
              _replaceStyleTags(content),
             '</p>'
           ]);
@@ -233,7 +252,7 @@
 
           // If branch isn't inline, push a space before it
           results.push([
-            '<span data-rd-openedby-i="' + id + '">',
+            '<span data-rd-openedby-i="' + id + '" data-rd-speed="' + token.content.speed + '">',
             token.content.inline ? '' : '&nbsp',
              _replaceStyleTags(content),
             '</span>'
@@ -247,7 +266,7 @@
 
           // If branch isn't inline, push a space before it
           results.push([
-            '<span data-rd-openedby-id="' + token.content.value + '">',
+            '<span data-rd-openedby-id="' + token.content.value + '" data-rd-speed="' + token.content.speed + '">',
             token.content.inline ? '' : '&nbsp',
              _replaceStyleTags(content),
             '</span>'

@@ -50,7 +50,7 @@ $.fn.showByTyping = function () {
         $part.append(text.substr(end - 1, 1));
         typeLetters(end + 1);
 
-      }, Math.round(Math.random() * 100) + 25);
+      }, Math.round(Math.random() * 50) + 25);
 
     })(1);
 
