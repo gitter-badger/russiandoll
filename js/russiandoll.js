@@ -3,10 +3,11 @@
 (function (_) {
 
   var _errorMessages = {
-    templateMustBeString: 'Template must be a string',
-    unknownIndent: "Indentation could not be determined.",
-    badBlockSyntax: "Bad block syntax",
-    badLinkSyntax: "Bad link syntax"
+    templateMustBeString:             "Template must be a string",
+    unknownIndent:                    "Indentation could not be determined",
+    badBlockSyntax:                   "Bad block syntax",
+    badLinkSyntax:                    "Bad link syntax",
+    mixedContentInNewBranchShortcut:  "Cannot mix content and block types in a new branch shortcut"
   };
 
   var _throwError = function (messageType, line) {
@@ -85,19 +86,17 @@
 
         // Find block types and create tokens for them
         if ( isBlock ) {
-          
+
           // Separate block syntax parts
           var block = line.content.match(/^>>?(?:(\-|\+))?([\w-_]+)?$/);
-          
+
           // Throw error if regexp splitting failed.
           if (!block)
             return _throwError('badBlockSyntax', line.line);
-          
+
           // Register the block's speed
           content.speed = block[1] == '-' ? 0 : ( block[1] == '+' ? 2 : 1 );
-          
-          if (content.speed != 1) debugger;
-          
+
           // Determine the block's type
           var blockID = block[2] ? block[2] : false;
 
@@ -123,7 +122,7 @@
           if ( /^>>/.test(line.content) ) {
             content.inline = true;
           }
-        
+
         // If line is a content line, tokenize inline elements
         } else {
 
@@ -151,7 +150,7 @@
                 , externalLinkTarget    = (linkMatch[2].match(/^(http(s)?:\/\/.*)$/) || [])[1];
 
               link.target = paragraphWithIDTarget || externalLinkTarget;
-              
+
               // If link matches neither block ID syntax nor link,
               // it has a bad syntax.
               if (!link.target)
@@ -180,22 +179,47 @@
 
     }).call(this, splitLines);
 
-    // Link immediate content tokens by creating
+    // Link consecutively nested content tokens by creating
     // an intermediate branch between them (new branch shortcut)
     tokens = (function linkBranches (tokens) {
-      return _(tokens).map(function(token, x){
+      return _(tokens).map(function(token, x) {
 
         if ( token.children ) {
-          token.children = _(token.children).map(function(child){
-            if ( token.content.type == 'content' &&
-              child.content.type == 'content' ) {
-              return {
-                content: { type: 'branch' },
-                children: [child]
-              }
-            }
-            return child;
+
+          // If our processed token is 'content' type and its children
+          // are content types too, create a branch between them
+          var areConsecutive = (token.content.type == 'content') &&
+            _(token.children).some(function(child) {
+            return child.content.type == 'content';
           });
+
+          if (areConsecutive) {
+
+            // If one of the content children is content type
+            //  but some are not, throw error
+            var nonContentTypeToken = _(token.children).find(function(child){
+              return child.content.type != 'content';
+            });
+            if (nonContentTypeToken)
+              return _throwError('mixedContentInNewBranchShortcut', nonContentTypeToken.line);
+
+            token.children = [{
+              content: { type: 'branch' },
+              children: token.children
+            }];
+
+          }
+
+          // token.children = _(token.children).map(function(child){
+          //   if ( token.content.type == 'content' &&
+          //     child.content.type == 'content' ) {
+          //     return {
+          //       content: { type: 'branch' },
+          //       children: [child]
+          //     }
+          //   }
+          //   return child;
+          // });
 
           linkBranches.call(this, token.children);
         }
@@ -236,7 +260,7 @@
         }
 
         if ( token.content.type == 'paragraphWithID' ) {
-          
+
           var content = _.flatten(parseTokens(token.children)).join('');
           results.push([
             '<p data-rd-openedby-id="' + token.content.value + '" data-rd-speed="' + token.content.speed + '">',
