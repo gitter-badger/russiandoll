@@ -1,12 +1,5 @@
 $(function(){
 
-  var fs;
-  try {
-    fs = require('fs');
-  } catch (e) {
-    fs = false;
-  }
-
   /* Animate icon */
   $('#separator-icon').lazylinepainter({
     "svgData": separatorIconPath,
@@ -137,64 +130,5 @@ $(function(){
     var id = $(this).attr('data-rd-opens-id');
     $(this).add('[data-rd-openedby-id="' + id + '"]').removeClass('hovered');
   });
-
-  /* File save */
-
-  var $saveInput = $('<input type="file" nwsaveas="Untitled.rdl" style="display: none;" />');
-  $('body').append($saveInput);
-
-  $saveInput.on('change', function(e){
-    if (!fs) return;
-    fs.writeFileSync(this.value, editor.getValue());
-  });
-
-  /* File open */
-
-  var $openInput = $('<input type="file" accept=".rdl,.txt" style="display: none;" />');
-  $('body').append($openInput);
-
-  $openInput.on('change', function(e){
-
-    if (!fs) return;
-
-    fs.readFile(this.value, function(err, data){
-      if (!err) editor.setValue(data.toString());
-    });
-
-  });
-
-  /* OSX Menus */
-
-  var gui = require('nw.gui');
-  var mb = new gui.Menu({ type : "menubar" });
-
-  mb.createMacBuiltin("Russiandoll", {
-    hideWindow: true
-  });
-
-  var Window = gui.Window.get();
-  Window.menu = mb;
-
-  var file = new gui.Menu();
-
-  file.append(new gui.MenuItem({
-    label: 'Open',
-    modifiers: 'cmd',
-    key: 'o',
-    click: function () {
-      $openInput.trigger('click');
-    }
-  }));
-
-  file.append(new gui.MenuItem({
-    label: 'Save As',
-    modifiers: 'cmd',
-    key: 's',
-    click: function () {
-      $saveInput.trigger('click');
-    }
-  }));
-
-  Window.menu.insert(new gui.MenuItem({ label: 'File', submenu: file }), 1);
 
 });
