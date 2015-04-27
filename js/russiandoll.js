@@ -7,7 +7,7 @@
     unknownIndent:                    "Indentation could not be determined",
     badBlockSyntax:                   "Bad block syntax",
     badLinkSyntax:                    "Bad link syntax",
-    mixedContentInNewBranchShortcut:  "Cannot mix content and block types in a new branch shortcut"
+    mixedContentInBranch:  "Cannot mix content and block types in a new branch shortcut"
   };
 
   var _throwError = function (messageType, line) {
@@ -180,11 +180,24 @@
     }).call(this, splitLines);
 
     // Link consecutively nested content tokens by creating
-    // an intermediate branch between them (new branch shortcut)
+    // an intermediate branch between them (new branch shortcut).
+    // Also, check for mixed content and throw errors accordingly.
     tokens = (function linkBranches (tokens) {
       return _(tokens).map(function(token, x) {
 
         if ( token.children ) {
+
+          // If we have children, we're in a branch. If a branch
+          // has mixed content, throw error.
+          var areMixedTypes =
+            _(token.children).some(function(child) {
+              return child.content.type == 'content';
+            }) && _(token.children).some(function(child) {
+              return child.content.type != 'content';
+            });
+
+          if (areMixedTypes)
+            return _throwError('mixedContentInBranch', token.line);
 
           // If our processed token is 'content' type and its children
           // are content types too, create a branch between them
@@ -193,33 +206,11 @@
             return child.content.type == 'content';
           });
 
-          if (areConsecutive) {
-
-            // If one of the content children is content type
-            //  but some are not, throw error
-            var nonContentTypeToken = _(token.children).find(function(child){
-              return child.content.type != 'content';
-            });
-            if (nonContentTypeToken)
-              return _throwError('mixedContentInNewBranchShortcut', nonContentTypeToken.line);
-
+          if (areConsecutive)
             token.children = [{
               content: { type: 'branch' },
               children: token.children
             }];
-
-          }
-
-          // token.children = _(token.children).map(function(child){
-          //   if ( token.content.type == 'content' &&
-          //     child.content.type == 'content' ) {
-          //     return {
-          //       content: { type: 'branch' },
-          //       children: [child]
-          //     }
-          //   }
-          //   return child;
-          // });
 
           linkBranches.call(this, token.children);
         }
@@ -308,9 +299,6 @@
 
             } else {
 
-              // Create unique id for link
-              var id = _.uniqueId(); refIds.push(id);
-
               // Create id-based or index-based links depending
               // on target existence
               if (contentElement.target) {
@@ -324,9 +312,14 @@
                   ]);
                 }
               } else {
+
+                // Create unique id for link
+                var id = _.uniqueId(); refIds.push(id);
+
                 results.push([
                   '<a data-rd-opens-i="' + id + '">'
                 ]);
+
               }
 
               results.push([
