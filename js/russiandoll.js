@@ -7,7 +7,7 @@
     unknownIndent:                    "Indentation could not be determined",
     badBlockSyntax:                   "Bad block syntax",
     badLinkSyntax:                    "Bad link syntax",
-    mixedContentInBranch:  "Cannot mix content and block types in a new branch shortcut"
+    mixedContentInBranch:             "Cannot mix content and block types in a branch"
   };
 
   var _throwError = function (messageType, line) {
