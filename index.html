@@ -35,27 +35,6 @@
 		<link rel="stylesheet" type="text/css" href="css/vendor/codemirror-4.4.1.css">
 		<link rel="stylesheet" type="text/css" href="css/vendor/neo.css">
 
-		<script>
-
-			/* Node-webkit initialization */
-
-			if ((typeof module !== "undefined" && module.exports &&
-					typeof window === 'undefined')) {
-
-				var gui = require('nw.gui');
-				var win = gui.Window.get();
-
-				var Menubar = new gui.Menu({ type: 'menubar' });
-				Menubar.createMacBuiltin("Russiandoll");
-				win.menu = Menubar;
-
-				// Eventually use require() here, now that we know
-				// that we have access to CommonJS
-
-			}
-
-		</script>
-
 	</head>
 
 	<body>
@@ -86,16 +65,16 @@
 	.
 		</textarea>
 
-		<div id="editor-errors">
+		<!-- Errors -->
 
+		<div id="editor-errors">
 			<strong>Error:</strong>
 
 			<span id="editor-errors-line">
-				(Line <span>8</span>)
+				(Line <span></span>)
 			</span>
 
-			<span id="editor-errors-message">Nothing to see here</span>
-
+			<span id="editor-errors-message"></span>
 		</div>
 
 		<div id="separator-icon"></div>

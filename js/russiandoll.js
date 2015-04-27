@@ -68,15 +68,6 @@
 
   var Tokenizer = function (splitLines) {
 
-    // Utility to hardcode markdown-like tags for bold (**),
-    // italic (*) and strikethrough (~~)
-    var _replaceStyleTags = function (str) {
-      return str
-        .replace(/~~([^~]+?)~~/g,       '<del>$1</del>')
-        .replace(/\*\*([^\*]+?)\*\*/g,  '<strong>$1</strong>')
-        .replace(/\*([^\*]+?)\*/g,      '<em>$1</em>');
-    };
-
     // Recursively replace line contents by tokens
     var tokens = (function tokenize (lines) {
       return _(lines).map(function(line, i){
@@ -185,35 +176,35 @@
     tokens = (function linkBranches (tokens) {
       return _(tokens).map(function(token, x) {
 
-        if ( token.children ) {
+        if ( !token.children ) return token;
 
-          // If we have children, we're in a branch. If a branch
-          // has mixed content, throw error.
-          var areMixedTypes =
-            _(token.children).some(function(child) {
-              return child.content.type == 'content';
-            }) && _(token.children).some(function(child) {
-              return child.content.type != 'content';
-            });
-
-          if (areMixedTypes)
-            return _throwError('mixedContentInBranch', token.line);
-
-          // If our processed token is 'content' type and its children
-          // are content types too, create a branch between them
-          var areConsecutive = (token.content.type == 'content') &&
-            _(token.children).some(function(child) {
+        // If we have children, we're in a branch. If a branch
+        // has mixed content, throw error.
+        var areMixedTypes =
+          _(token.children).some(function(child) {
             return child.content.type == 'content';
+          }) && _(token.children).some(function(child) {
+            return child.content.type != 'content';
           });
 
-          if (areConsecutive)
-            token.children = [{
-              content: { type: 'branch' },
-              children: token.children
-            }];
+        if (areMixedTypes)
+          return _throwError('mixedContentInBranch', token.line);
 
-          linkBranches.call(this, token.children);
-        }
+        // If our processed token is 'content' type and its children
+        // are content types too, create a branch between them
+        var areConsecutive = (token.content.type == 'content') &&
+          _(token.children).some(function(child) {
+          return child.content.type == 'content';
+        });
+
+        if (areConsecutive)
+          token.children = [{
+            content: { type: 'branch' },
+            children: token.children
+          }];
+
+        // Recursion for this branch's children
+        linkBranches.call(this, token.children);
 
         return token;
 
@@ -314,10 +305,10 @@
               } else {
 
                 // Create unique id for link
-                var id = _.uniqueId(); refIds.push(id);
+                var refId = _.uniqueId(); refIds.push(refId);
 
                 results.push([
-                  '<a data-rd-opens-i="' + id + '">'
+                  '<a data-rd-opens-i="' + refId + '">'
                 ]);
 
               }
