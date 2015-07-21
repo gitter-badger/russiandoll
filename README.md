@@ -1,118 +1,39 @@
 # Russiandoll
 
-Russiandoll is a **plain text formatting syntax that delivers literary content in interactive, foldable pieces of sentence**, inspired by [Alan Trotter](https://twitter.com/alantrotter)'s [website](http://greaterthanorequalto.net/). It also borrows the design philosophy of [Markdown](http://daringfireball.net/projects/markdown/), i.e. making a complex structure easily readable in plain text, as well as some of its syntactic elements.
+<img src="https://raw.githubusercontent.com/christophemarois/russiandoll/master/russiandoll.png" height="150">
 
-Because an image is worth a thousand words, a working, live demo will shortly be put online.
+Russiandoll is a writing software that transforms a special syntax into **interactive pieces of sentence**. Russiandoll is great for **writing letters and novels** because of the vocal pace it gives to the text, amongst other unique literary devices. Russiandoll renders standard HTML that can be easily embedded in personal websites or blogs, or sent as a stand-alone HTML file that you can send to people or host on the web.
 
 ## Syntax
 
-Russiandoll is [indentation-based](https://en.wikipedia.org/wiki/Off-side_rule), which means that the level of indentation specifies the scope of its declarations. Like most indentation-based languages (Python, Ruby, etc), it doesn't matter whether you use spaces or tabs to indent your declarations.
+A Russiandoll document is built around paragraphs. Paragraphs contain *fragment links* that open their corresponding *fragments*. Fragments can be infinitely nested in fragments, just like russian dolls.
 
-Because it has literary purposes, Russiandoll is built around **paragraphs** that contain **fragment links** and **branches**. The fragment links trigger the branches and make them appear.
+Fragment links, paragraphs and fragments are linked by **the id they share**, or **the sequential order in which they appear**.
 
-Paragraph and branches share the same symbol, `>`. In the case of paragraphs, their content is displayed by default. The branches are only revealed when their trigger links are clicked.
+**Note on ids:** *Hidden identifier* (or *ids*) should only contain **alphanumeric** (including most latin characters like `éèàêâ`), **dashes, underscores or apostrophes** (`-_'`). For example, `>What's-happening` is a valid id whereas `>What's happening?` is not.
 
-**Note:** Russiandoll automatically separates branches by spaces. If you don't want a branch to be introduced by a space, use `>>` instead of `>`.
+### Paragraphs
 
-### Paragraphs 
+A paragraph is noted `>id`, where `id` is the hidden identifier of the paragraph, that a fragment link with the same id will open. A paragraph without an id will be displayed by default.
 
-The first indentation level of a Russiandoll document should only contain paragraphs. To create a paragraph, start a line with `>` and nest some content inside of it.
+### Fragments
 
-##### Example: Simple paragraph
+A paragraph is noted `{fragment text}` or `{id:fragment text}`, where `id` is the hidden identifier of the fragment, that a fragment link with the same id will open.
 
-```
->
-  This is the first line of the story.
-```
+### Fragment links
 
-You can also write your text on multiple lines. Just be sure to add spaces at the end of a line if you want to separate it from the next one.
+A fragment link is noted `[link text]` or `[link text]#id` where `id` is the hidden identifier of the fragment or paragraph it should open.
 
-##### Example: Multiline paragraph
+### Inline elements
 
-```
->
-  This is the first 
-  line of the 
-  story.
-```
+Russiandoll supports some markdown-like inline tags that you can combine:
 
-### Fragment links and branches
+Type|Markup|Result
+---|---|---
+Bold|`**Bold**` or `__Bold__`|<strong>Bold</strong>
+Italic|`*Italic*` or `_Italic_`|<em>Italic</em>
+Strikethrough|`~~Strikethrough~~`|<del>Strikethrough</del>
+link|`@link to google(http://www.google.com)`|<a href="http://www.google.com" target="_blank">link to google</a>
+image|`!(path/or/url/to.jpg)`|<img src="https://raw.githubusercontent.com/christophemarois/russiandoll/master/russiandoll.png" height="40">
 
-The branches are the nested parts of a sentence. They only unfold when their fragment links are clicked. A fragment link should be wrapped in square brackets `[]`. When clicked, it will open its corresponding branch.
-
-**Shortcut**: If you only have one branch nested inside one, you can skip the branch symbol `>`.
-
-##### Example: New branch
-
-```
->
-  This new paragraph is pretty [short]. 
-  	>
-      But coupled with this hidden sentence it isn't!
-```
-
-##### Example: New branch (shortcut)
-
-```
->
-  This only has one [link].
-    So I can skip the new branch symbol!
-```
-
-When several fragment links are present in the same sentence, they will open their corresponding branches, according to their order of appearance.
-
-```
->
-  I have three branches: [a], [b] and [c].
-  	>
-  	  I'm opened by a
-  	>
-  	  I'm opened by b
-  	>
-  	  I'm opened by c 
-```
-
-### Special paragraphs and branches
-
-Paragraphs and branches can be triggered by a unique identifier, overriding the order of appearance. This breaks linearity and can be a great storytelling device.
-
-To do so, create a special fragment link`[text](>unique-id)`where `text` is the link's text and `unique-id` is the unique identifier of the paragraph or branch you want to open. This paragraph or branch will, correspondingly named `>unique-id`.
-
-**Note:** Unique identifiers can contains alphanumeric caracters, underscores and dashes.
-
-##### Example: Special paragraphs and branches
-
-```
->
-  I have to ask you a [question].
-    What do you think about [love](>i-fell-in-love)?
-
->i-fell-in-love
-  I [fell] in love [once](>once).
-    >
-      It was a beautiful 
-        >>once
-		  English 
-      girl.
-```
-
-### Inline markup
-
-Russiandoll also support some basic text formatting syntaxes such as **bold** `**`, **italic** `*`, **strikethrough** `~~`, as well as **external links** `[](http://)`. 
-
-**Note:** Make sure your links begin by `http://`, `https://` or `mailto:` as those are the only ones allowed in Russiandoll. Furthermore, external links will always open in a new window.
-
-##### Example: 
-
-```
->
-  **Bold**
->
-  *Italic*
->
-  ~~Strikethrough~~
->
-  This opens a [branch], but this goes to my [website](http://mywebsite.com).
-  	Have you opened my website yet?
-```
 

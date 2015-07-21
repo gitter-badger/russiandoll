@@ -1,13 +1,17 @@
 {
-  "name": "Russiandoll Editor",
-  "main": "index.html",
-  "window": {
-    "title": "Russiandoll Editor"
-    // , "toolbar": false
-    , "position": "center"
-    , "width": 1200
-    , "height": 700
-    , "resizable": true
-    // , "frame": false
+  "name": "Russiandoll",
+  "description": "Markup language for interactive stories",
+  "license": "MIT",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/christophemarois/russiandoll.git"
+  },
+  "devDependencies": {
+    "gulp": "latest",
+    "gulp-babel": "latest",
+    "gulp-sourcemaps": "latest",
+    "gulp-concat": "latest",
+    "gulp-uglify": "latest"
   }
 }
