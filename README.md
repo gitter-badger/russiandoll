@@ -1,5 +1,7 @@
 # Russiandoll
 
+[![Join the chat at https://gitter.im/christophemarois/russiandoll](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/christophemarois/russiandoll?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 <img src="https://raw.githubusercontent.com/christophemarois/russiandoll/master/russiandoll.png" height="150">
 
 Russiandoll is a writing software that transforms a special syntax into **interactive pieces of sentence**. Russiandoll is great for **writing letters and novels** because of the vocal pace it gives to the text, amongst other unique literary devices. Russiandoll renders standard HTML that can be easily embedded in personal websites or blogs, or sent as a stand-alone HTML file that you can send to people or host on the web.
